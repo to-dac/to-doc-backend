@@ -2,6 +2,7 @@ package com.todoc.controller;
 
 import com.todoc.dto.response.FormTemplateDetailResponse;
 import com.todoc.dto.response.FormTemplateResponse;
+import com.todoc.dto.response.PermitDashboardResponse;
 import com.todoc.service.FormTemplateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +17,18 @@ public class FormTemplateController {
     private final FormTemplateService formTemplateService;
 
     @GetMapping
-    public List<FormTemplateResponse> list() {
-        return formTemplateService.listActive();
+    public List<FormTemplateResponse> list(
+            @RequestParam(required = false) List<String> templateCodes) {
+        return formTemplateService.listActive(templateCodes);
     }
 
     @GetMapping("/{templateCode}")
     public FormTemplateDetailResponse getDetail(@PathVariable String templateCode) {
         return formTemplateService.getDetail(templateCode);
+    }
+
+    @GetMapping("/{templateCode}/dashboard")
+    public PermitDashboardResponse getDashboard(@PathVariable String templateCode) {
+        return formTemplateService.getDashboard(templateCode);
     }
 }
