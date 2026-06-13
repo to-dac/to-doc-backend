@@ -37,7 +37,7 @@ public class FormSubmission {
     @Convert(converter = SubmissionStatusConverter.class)
     @Column(nullable = false, length = 20)
     @Builder.Default
-    private SubmissionStatus status = SubmissionStatus.DRAFT;
+    private SubmissionStatus status = SubmissionStatus.PENDING;
 
     @Column(name = "submitted_at")
     private LocalDateTime submittedAt;
@@ -57,6 +57,10 @@ public class FormSubmission {
 
     public void complete() {
         this.status = SubmissionStatus.COMPLETED;
+    }
+
+    public void toDraft() {
+        this.status = SubmissionStatus.DRAFT;
     }
 
     public void cancel() {

@@ -13,7 +13,6 @@ import com.todoc.dto.response.ChatMessageResponse;
 import com.todoc.dto.response.ChatSessionResponse;
 import com.todoc.domain.FormSubmission;
 import com.todoc.dto.response.FormSubmissionResponse;
-import com.todoc.dto.response.FormTemplateDetailResponse;
 import com.todoc.dto.response.LandInfoResponse;
 import com.todoc.exception.NotFoundException;
 import com.todoc.repository.ChatMessageRepository;
@@ -53,6 +52,7 @@ public class ChatService {
     private final AiPermitClient aiPermitClient;
     private final FormTemplateService formTemplateService;
     private final FormSubmissionService formSubmissionService;
+    private final DocumentProcessingService documentProcessingService;
     private final ObjectMapper objectMapper;
 
     @Transactional
@@ -101,25 +101,13 @@ public class ChatService {
             throw new IllegalStateException("세션에 토지 정보가 없습니다.");
         }
 
-        try {
-            LandInfoResponse landInfo = objectMapper.readValue(session.getLandInfo(), LandInfoResponse.class);
-            FormTemplateDetailResponse templateDetail = formTemplateService.getDetailById(session.getTemplateId());
+        FormSubmission sub = formSubmissionService.createPending(
+                session.getTemplateId(), session.getUser().getId(), session);
+        session.updateSubmissionId(sub.getId());
 
-            AiPermitClient.CreateDocumentResponse docResponse =
-                    aiPermitClient.createDocument(sessionId, landInfo, templateDetail);
-            if (docResponse == null) {
-                throw new IllegalStateException("AI 서버 응답이 없습니다.");
-            }
+        documentProcessingService.process(sessionId, sub.getId());
 
-            List<AiPermitClient.AnswerItem> answers = docResponse.toAnswerItems();
-            FormSubmission sub = formSubmissionService.submitAiGenerated(
-                    session.getTemplateId(), session.getUser().getId(), session, answers);
-            session.updateSubmissionId(sub.getId());
-
-            return formSubmissionService.getById(sub.getId());
-        } catch (JsonProcessingException e) {
-            throw new IllegalStateException("토지 정보 파싱 실패", e);
-        }
+        return formSubmissionService.getById(sub.getId());
     }
 
     @Transactional(readOnly = true)

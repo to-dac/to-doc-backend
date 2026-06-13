@@ -61,6 +61,46 @@ public class FormSubmissionService {
     }
 
     @Transactional
+    public FormSubmission createPending(Long templateId, Long userId, ChatSession session) {
+        var template = templateRepository.findById(templateId)
+                .orElseThrow(() -> new NotFoundException("템플릿을 찾을 수 없습니다: id=" + templateId));
+        var user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("유저를 찾을 수 없습니다: id=" + userId));
+        var submission = FormSubmission.builder()
+                .template(template)
+                .user(user)
+                .session(session)
+                .build();
+        return submissionRepository.save(submission);
+    }
+
+    @Transactional
+    public FormSubmissionResponse fillAnswers(Long submissionId, List<AiPermitClient.AnswerItem> answers) {
+        var submission = submissionRepository.findById(submissionId)
+                .orElseThrow(() -> new NotFoundException("제출을 찾을 수 없습니다: id=" + submissionId));
+
+        List<FormAnswer> formAnswers = answers.stream()
+                .map(item -> {
+                    var question = questionRepository.findById(item.question_id())
+                            .orElseThrow(() -> new NotFoundException("질문을 찾을 수 없습니다: id=" + item.question_id()));
+                    return FormAnswer.builder()
+                            .submission(submission)
+                            .question(question)
+                            .answerValue(item.answer_value())
+                            .build();
+                })
+                .toList();
+
+        answerRepository.saveAll(formAnswers);
+        submission.toDraft();
+
+        List<FormSubmissionResponse.AnswerResponse> answerResponses = formAnswers.stream()
+                .map(FormSubmissionResponse.AnswerResponse::from)
+                .toList();
+        return FormSubmissionResponse.from(submission, answerResponses);
+    }
+
+    @Transactional
     public FormSubmission submitAiGenerated(Long templateId, Long userId, ChatSession session,
             List<AiPermitClient.AnswerItem> answers) {
         var template = templateRepository.findById(templateId)
