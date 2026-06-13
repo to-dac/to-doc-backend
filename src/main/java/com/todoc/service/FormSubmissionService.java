@@ -1,0 +1,82 @@
+package com.todoc.service;
+
+import com.todoc.domain.FormAnswer;
+import com.todoc.domain.FormSubmission;
+import com.todoc.dto.request.SubmitFormRequest;
+import com.todoc.dto.response.FormSubmissionResponse;
+import com.todoc.dto.response.FormSubmissionResponse.AnswerResponse;
+import com.todoc.exception.NotFoundException;
+import com.todoc.repository.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class FormSubmissionService {
+
+    private final FormSubmissionRepository submissionRepository;
+    private final FormAnswerRepository answerRepository;
+    private final FormTemplateRepository templateRepository;
+    private final FormQuestionRepository questionRepository;
+    private final UserRepository userRepository;
+
+    @Transactional
+    public FormSubmissionResponse submit(SubmitFormRequest request) {
+        var template = templateRepository.findById(request.templateId())
+                .orElseThrow(() -> new NotFoundException("템플릿을 찾을 수 없습니다: id=" + request.templateId()));
+        var user = userRepository.findById(request.userId())
+                .orElseThrow(() -> new NotFoundException("유저를 찾을 수 없습니다: id=" + request.userId()));
+
+        var submission = FormSubmission.builder()
+                .template(template)
+                .user(user)
+                .build();
+        submission = submissionRepository.save(submission);
+
+        final var savedSubmission = submission;
+        List<FormAnswer> answers = request.answers().stream()
+                .map(item -> {
+                    var question = questionRepository.findById(item.questionId())
+                            .orElseThrow(() -> new NotFoundException("질문을 찾을 수 없습니다: id=" + item.questionId()));
+                    return FormAnswer.builder()
+                            .submission(savedSubmission)
+                            .question(question)
+                            .answerValue(item.answerValue())
+                            .build();
+                })
+                .toList();
+
+        answerRepository.saveAll(answers);
+        submission.submit();
+
+        List<AnswerResponse> answerResponses = answers.stream()
+                .map(AnswerResponse::from)
+                .toList();
+        return FormSubmissionResponse.from(submission, answerResponses);
+    }
+
+    @Transactional(readOnly = true)
+    public FormSubmissionResponse getById(Long id) {
+        var submission = submissionRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("제출을 찾을 수 없습니다: id=" + id));
+        List<AnswerResponse> answers = answerRepository.findAllBySubmissionId(id).stream()
+                .map(AnswerResponse::from)
+                .toList();
+        return FormSubmissionResponse.from(submission, answers);
+    }
+
+    @Transactional(readOnly = true)
+    public List<FormSubmissionResponse> listByUser(Long userId) {
+        return submissionRepository.findAllByUserIdOrderByCreatedAtDesc(userId).stream()
+                .map(s -> {
+                    List<AnswerResponse> answers = answerRepository.findAllBySubmissionId(s.getId()).stream()
+                            .map(AnswerResponse::from)
+                            .toList();
+                    return FormSubmissionResponse.from(s, answers);
+                })
+                .toList();
+    }
+}

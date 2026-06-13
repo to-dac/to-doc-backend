@@ -1,0 +1,335 @@
+{
+  "templateCode": "building_major_repair_use_change_permit",
+  "name": "건축ㆍ대수선ㆍ용도변경 (변경)허가 신청서",
+  "description": "건축법 시행규칙 별지 제1호의4서식 기반 폼 데이터",
+  "version": "2025-07-31",
+  "metadata": {"law": "건축법 시행규칙", "formNo": "별지 제1호의4서식", "pages": 6},
+  "sections": [
+    {
+      "sectionCode": "basic",
+      "name": "기본 정보",
+      "orderNo": 1,
+      "questions": [
+        {"questionType": "TEXT",   "name": "허가번호",    "description": "연도-기관코드-업무구분-허가일련번호", "displayType": "text",         "layoutKey": "permitNumber",    "orderNo": 1, "metadata": {}},
+        {"questionType": "DATE",   "name": "접수일자",    "displayType": "date",         "layoutKey": "receivedDate",    "orderNo": 2, "metadata": {}},
+        {"questionType": "DATE",   "name": "처리일자",    "displayType": "date",         "layoutKey": "processedDate",   "orderNo": 3, "metadata": {}},
+        {"questionType": "CHOICE", "name": "건축구분",    "displayType": "checkboxGroup",
+          "options": ["신축","증축","개축","재축","이전","대수선","허가사항 변경","용도변경","가설건축물 건축"],
+          "layoutKey": "buildingCategory", "orderNo": 4, "metadata": {}}
+      ]
+    },
+    {
+      "sectionCode": "owner",
+      "name": "건축주",
+      "orderNo": 2,
+      "questions": [
+        {"questionType": "TEXT",   "name": "성명(법인명)",                      "displayType": "text",      "layoutKey": "ownerName",                 "orderNo": 1, "metadata": {}},
+        {"questionType": "TEXT",   "name": "생년월일(사업자 또는 법인등록번호)", "displayType": "text",      "layoutKey": "ownerRegistrationNumber",   "orderNo": 2, "metadata": {}},
+        {"questionType": "TEXT",   "name": "주소",                              "displayType": "textarea",  "layoutKey": "ownerAddress",              "orderNo": 3, "metadata": {}},
+        {"questionType": "TEXT",   "name": "전화번호",                          "displayType": "text",      "layoutKey": "ownerPhone",                "orderNo": 4, "metadata": {}},
+        {"questionType": "CHOICE", "name": "전자우편 송달동의", "options": ["동의함","동의하지 않음"], "displayType": "radio", "layoutKey": "ownerEmailDeliveryConsent", "orderNo": 5, "metadata": {}},
+        {"questionType": "TEXT",   "name": "전자우편 주소",                     "displayType": "email",     "layoutKey": "ownerEmail",                "orderNo": 6, "metadata": {}},
+        {"questionType": "TEXT",   "name": "건축주 서명 또는 인",               "displayType": "signature", "layoutKey": "ownerSignature",            "orderNo": 7, "metadata": {}}
+      ]
+    },
+    {
+      "sectionCode": "designer",
+      "name": "설계자",
+      "orderNo": 3,
+      "questions": [
+        {"questionType": "TEXT", "name": "성명(법인명)",       "displayType": "text",      "layoutKey": "designerName",                    "orderNo": 1, "metadata": {}},
+        {"questionType": "TEXT", "name": "자격번호",           "displayType": "text",      "layoutKey": "designerQualificationNumber",      "orderNo": 2, "metadata": {}},
+        {"questionType": "TEXT", "name": "협회 회원번호",      "displayType": "text",      "layoutKey": "designerAssociationMemberNumber", "orderNo": 3, "metadata": {}},
+        {"questionType": "TEXT", "name": "사무소 명",          "displayType": "text",      "layoutKey": "designerOfficeName",              "orderNo": 4, "metadata": {}},
+        {"questionType": "TEXT", "name": "신고번호",           "displayType": "text",      "layoutKey": "designerReportNumber",            "orderNo": 5, "metadata": {}},
+        {"questionType": "TEXT", "name": "사무소 주소",        "displayType": "textarea",  "layoutKey": "designerOfficeAddress",           "orderNo": 6, "metadata": {}},
+        {"questionType": "TEXT", "name": "전화번호",           "displayType": "text",      "layoutKey": "designerPhone",                   "orderNo": 7, "metadata": {}},
+        {"questionType": "TEXT", "name": "설계자 서명 또는 인","displayType": "signature", "layoutKey": "designerSignature",               "orderNo": 8, "metadata": {}}
+      ]
+    },
+    {
+      "sectionCode": "site_condition",
+      "name": "대지조건",
+      "orderNo": 4,
+      "questions": [
+        {"questionType": "TEXT", "name": "대지위치",   "displayType": "text", "layoutKey": "siteLocation",    "orderNo": 1, "metadata": {}},
+        {"questionType": "TEXT", "name": "지번",       "displayType": "text", "layoutKey": "lotNumber",       "orderNo": 2, "metadata": {}},
+        {"questionType": "TEXT", "name": "관련지번",   "displayType": "text", "layoutKey": "relatedLotNumber","orderNo": 3, "metadata": {}},
+        {"questionType": "TEXT", "name": "지목",       "displayType": "text", "layoutKey": "landCategory",    "orderNo": 4, "metadata": {}},
+        {"questionType": "TEXT", "name": "용도지역",   "displayType": "text", "layoutKey": "zoningDistrict",  "orderNo": 5, "metadata": {}},
+        {"questionType": "TEXT", "name": "용도지구",   "displayType": "text", "layoutKey": "useDistrict",     "orderNo": 6, "metadata": {}},
+        {"questionType": "TEXT", "name": "용도구역",   "displayType": "text", "layoutKey": "useZone",         "orderNo": 7, "metadata": {}}
+      ]
+    },
+    {
+      "sectionCode": "overall_summary",
+      "name": "전체 개요",
+      "orderNo": 5,
+      "questions": [
+        {"questionType": "NUMBER", "name": "대지면적",                               "displayType": "number", "validation": {"min": 0}, "layoutKey": "siteArea",              "orderNo": 1,  "metadata": {"unit": "㎡"}},
+        {"questionType": "NUMBER", "name": "건축면적",                               "displayType": "number", "validation": {"min": 0}, "layoutKey": "buildingArea",          "orderNo": 2,  "metadata": {"unit": "㎡"}},
+        {"questionType": "NUMBER", "name": "건폐율",                                 "displayType": "number", "validation": {"min": 0}, "layoutKey": "buildingCoverageRatio", "orderNo": 3,  "metadata": {"unit": "%"}},
+        {"questionType": "NUMBER", "name": "연면적 합계",                            "displayType": "number", "validation": {"min": 0}, "layoutKey": "totalFloorArea",        "orderNo": 4,  "metadata": {"unit": "㎡"}},
+        {"questionType": "NUMBER", "name": "연면적 합계(용적률 산정용)",             "displayType": "number", "validation": {"min": 0}, "layoutKey": "floorAreaForFar",       "orderNo": 5,  "metadata": {"unit": "㎡"}},
+        {"questionType": "NUMBER", "name": "용적률",                                 "displayType": "number", "validation": {"min": 0}, "layoutKey": "floorAreaRatio",        "orderNo": 6,  "metadata": {"unit": "%"}},
+        {"questionType": "TEXT",   "name": "건축물 명칭",                            "displayType": "text",                             "layoutKey": "buildingName",          "orderNo": 7,  "metadata": {"formNumber": "④"}},
+        {"questionType": "NUMBER", "name": "주 건축물 수",                           "displayType": "number", "validation": {"min": 0}, "layoutKey": "mainBuildingCount",     "orderNo": 8,  "metadata": {"unit": "동"}},
+        {"questionType": "NUMBER", "name": "부속 건축물 수",                         "displayType": "number", "validation": {"min": 0}, "layoutKey": "annexBuildingCount",    "orderNo": 9,  "metadata": {"unit": "동"}},
+        {"questionType": "NUMBER", "name": "부속 건축물 면적",                       "displayType": "number", "validation": {"min": 0}, "layoutKey": "annexBuildingArea",     "orderNo": 10, "metadata": {"unit": "㎡"}},
+        {"questionType": "TEXT",   "name": "주용도",                                 "displayType": "text",                             "layoutKey": "mainUse",               "orderNo": 11, "metadata": {"formNumber": "⑤"}},
+        {"questionType": "NUMBER", "name": "세대수",                                 "displayType": "number", "validation": {"min": 0}, "layoutKey": "householdCount",        "orderNo": 12, "metadata": {"unit": "세대"}},
+        {"questionType": "NUMBER", "name": "호수",                                   "displayType": "number", "validation": {"min": 0}, "layoutKey": "unitCount",             "orderNo": 13, "metadata": {"unit": "호"}},
+        {"questionType": "NUMBER", "name": "가구수",                                 "displayType": "number", "validation": {"min": 0}, "layoutKey": "familyCount",           "orderNo": 14, "metadata": {"unit": "가구"}},
+        {"questionType": "NUMBER", "name": "총 주차대수",                            "displayType": "number", "validation": {"min": 0}, "layoutKey": "totalParkingCount",     "orderNo": 15, "metadata": {"unit": "대"}},
+        {"questionType": "NUMBER", "name": "주택을 포함하는 경우 세대/가구/호별 평균 전용면적", "displayType": "number", "validation": {"min": 0}, "layoutKey": "averageExclusiveArea", "orderNo": 16, "metadata": {"unit": "㎡"}}
+      ]
+    },
+    {
+      "sectionCode": "facility_parking",
+      "name": "설비 및 주차장",
+      "orderNo": 6,
+      "questions": [
+        {"questionType": "TEXT",   "name": "하수처리시설 형식",           "displayType": "text",   "layoutKey": "sewageTreatmentType",           "orderNo": 1,  "metadata": {"formNumber": "⑥"}},
+        {"questionType": "NUMBER", "name": "하수처리시설 용량",           "displayType": "number", "validation": {"min": 0}, "layoutKey": "sewageTreatmentCapacity",    "orderNo": 2,  "metadata": {"unit": "인용"}},
+        {"questionType": "NUMBER", "name": "급수설비(저수조) 지상 수량",  "displayType": "number", "validation": {"min": 0}, "layoutKey": "waterTankAboveGroundCount",  "orderNo": 3,  "metadata": {"unit": "개"}},
+        {"questionType": "NUMBER", "name": "급수설비(저수조) 지상 총 용량","displayType": "number", "validation": {"min": 0}, "layoutKey": "waterTankAboveGroundCapacity","orderNo": 4, "metadata": {"unit": "㎥"}},
+        {"questionType": "NUMBER", "name": "급수설비(저수조) 지하 수량",  "displayType": "number", "validation": {"min": 0}, "layoutKey": "waterTankUndergroundCount",  "orderNo": 5,  "metadata": {"unit": "개"}},
+        {"questionType": "NUMBER", "name": "급수설비(저수조) 지하 총 용량","displayType": "number", "validation": {"min": 0}, "layoutKey": "waterTankUndergroundCapacity","orderNo": 6, "metadata": {"unit": "㎥"}},
+        {"questionType": "TABLE",  "name": "주차장", "displayType": "table",
+          "subFields": [
+            {"key": "parkingType",   "name": "구분",      "type": "TEXT"},
+            {"key": "indoorCount",   "name": "옥내 대수", "type": "NUMBER"},
+            {"key": "indoorArea",    "name": "옥내 면적", "type": "NUMBER", "unit": "㎡"},
+            {"key": "outdoorCount",  "name": "옥외 대수", "type": "NUMBER"},
+            {"key": "outdoorArea",   "name": "옥외 면적", "type": "NUMBER", "unit": "㎡"},
+            {"key": "nearbyCount",   "name": "인근 대수", "type": "NUMBER"},
+            {"key": "nearbyArea",    "name": "인근 면적", "type": "NUMBER", "unit": "㎡"},
+            {"key": "exemptCount",   "name": "면제 대수", "type": "NUMBER"}
+          ],
+          "layoutKey": "parkingSummary", "orderNo": 7, "metadata": {"rows": ["자주식","기계식","전기차"]}},
+        {"questionType": "NUMBER", "name": "공개 공지 면적",        "displayType": "number", "validation": {"min": 0}, "layoutKey": "publicOpenSpaceArea",        "orderNo": 8,  "metadata": {"unit": "㎡"}},
+        {"questionType": "NUMBER", "name": "조경 면적",             "displayType": "number", "validation": {"min": 0}, "layoutKey": "landscapeArea",              "orderNo": 9,  "metadata": {"unit": "㎡"}},
+        {"questionType": "NUMBER", "name": "건축선 후퇴 면적",      "displayType": "number", "validation": {"min": 0}, "layoutKey": "buildingLineSetbackArea",    "orderNo": 10, "metadata": {"unit": "㎡"}},
+        {"questionType": "NUMBER", "name": "건축선 후퇴 거리",      "displayType": "number", "validation": {"min": 0}, "layoutKey": "buildingLineSetbackDistance", "orderNo": 11, "metadata": {"unit": "m"}}
+      ]
+    },
+    {
+      "sectionCode": "special_agreement",
+      "name": "협정ㆍ특례ㆍ변경사항",
+      "orderNo": 7,
+      "questions": [
+        {"questionType": "BOOLEAN", "name": "건축협정을 체결한 건축물",             "displayType": "checkbox", "layoutKey": "hasBuildingAgreement",          "orderNo": 1,  "metadata": {}},
+        {"questionType": "BOOLEAN", "name": "결합건축협정을 체결한 건축물",         "displayType": "checkbox", "layoutKey": "hasCombinedBuildingAgreement",  "orderNo": 2,  "metadata": {}},
+        {"questionType": "BOOLEAN", "name": "특별건축구역에서 건축한 건축물",       "displayType": "checkbox", "layoutKey": "hasSpecialBuildingZone",         "orderNo": 3,  "metadata": {}},
+        {"questionType": "BOOLEAN", "name": "특별가로구역에서 건축한 건축물",       "displayType": "checkbox", "layoutKey": "hasSpecialStreetZone",          "orderNo": 4,  "metadata": {}},
+        {"questionType": "TEXT",    "name": "고시명",                               "displayType": "text",     "layoutKey": "noticeName",                    "orderNo": 5,  "metadata": {}},
+        {"questionType": "TEXT",    "name": "고시번호",                             "displayType": "text",     "layoutKey": "noticeNumber",                  "orderNo": 6,  "metadata": {}},
+        {"questionType": "DATE",    "name": "고시일자",                             "displayType": "date",     "layoutKey": "noticeDate",                    "orderNo": 7,  "metadata": {}},
+        {"questionType": "TEXT",    "name": "공고명",                               "displayType": "text",     "layoutKey": "announcementName",              "orderNo": 8,  "metadata": {}},
+        {"questionType": "TEXT",    "name": "공고번호",                             "displayType": "text",     "layoutKey": "announcementNumber",            "orderNo": 9,  "metadata": {}},
+        {"questionType": "DATE",    "name": "공고일자",                             "displayType": "date",     "layoutKey": "announcementDate",              "orderNo": 10, "metadata": {}},
+        {"questionType": "TEXT",    "name": "건축법 제73조에 따라 적용된 특례사항", "displayType": "textarea", "layoutKey": "buildingActArticle73Exception", "orderNo": 11, "metadata": {}},
+        {"questionType": "TEXT",    "name": "건축법 제77조의3제2항에 따라 적용된 특례사항", "displayType": "textarea", "layoutKey": "buildingActArticle77Exception", "orderNo": 12, "metadata": {}},
+        {"questionType": "TEXT",    "name": "변경사항", "description": "허가사항을 변경하려는 경우에만 간략히 작성", "displayType": "textarea", "layoutKey": "changeDetails", "orderNo": 13, "metadata": {}}
+      ]
+    },
+    {
+      "sectionCode": "batch_processing",
+      "name": "일괄처리 사항",
+      "orderNo": 8,
+      "questions": [
+        {"questionType": "CHOICE", "name": "일괄처리 사항",
+          "description": "건축법 제11조에 따라 다른 법률의 허가를 받거나 신고를 한 것으로 보는 사항",
+          "displayType": "checkboxGroup",
+          "options": [
+            "공사용 가설건축물 축조신고","공작물 축조신고","개발행위허가",
+            "도시ㆍ군계획시설사업 시행자의 지정 및 실시계획인가",
+            "산지전용허가ㆍ신고, 산지일시사용 허가신고",
+            "농지전용허가ㆍ신고 및 협의","사도개설허가","도로점용허가",
+            "비관리청 도로공사 시행 허가 및 도로의 연결허가","하천점용허가",
+            "개인하수처리시설 설치신고","배수설비 설치신고","상수도 공급신청",
+            "자가용전기설비 공사계획 인가ㆍ신고",
+            "수질오염물질 배출시설 설치 허가ㆍ신고",
+            "대기오염물질 배출시설 설치 허가ㆍ신고",
+            "소음ㆍ진동 배출시설 설치 허가ㆍ신고",
+            "가축분뇨 배출시설 설치 허가ㆍ신고","공원구역 행위허가","도시공원 점용허가",
+            "특정토양오염관리대상시설 신고","수산자원보호구역 행위허가","초지전용 허가ㆍ신고"
+          ],
+          "layoutKey": "batchProcessingItems", "orderNo": 1, "metadata": {}}
+      ]
+    },
+    {
+      "sectionCode": "period_signature",
+      "name": "기간 및 신청",
+      "orderNo": 9,
+      "questions": [
+        {"questionType": "DATE",   "name": "존치기간", "description": "가설건축물 건축허가인 경우만 작성", "displayType": "date",      "layoutKey": "temporaryBuildingRetentionDate", "orderNo": 1, "metadata": {}},
+        {"questionType": "NUMBER", "name": "시공기간", "description": "착공일부터", "displayType": "number", "validation": {"min": 0},   "layoutKey": "constructionPeriodYears",       "orderNo": 2, "metadata": {"unit": "년"}},
+        {"questionType": "DATE",   "name": "신청일",                                "displayType": "date",      "layoutKey": "applicationDate",               "orderNo": 3, "metadata": {}},
+        {"questionType": "TEXT",   "name": "건축주 서명 또는 인",                   "displayType": "signature", "layoutKey": "applicantSignature",            "orderNo": 4, "metadata": {}}
+      ]
+    },
+    {
+      "sectionCode": "building_unit_summary",
+      "name": "동별 개요",
+      "orderNo": 10,
+      "questions": [
+        {"questionType": "TABLE", "name": "기존 건축물의 동별 개요",
+          "description": "증축이 있는 경우 증가부분만 작성",
+          "displayType": "table",
+          "subFields": [
+            {"key": "mainOrAnnex",           "name": "주/부속구분",    "type": "CHOICE", "options": ["주 건축물","부속 건축물"]},
+            {"key": "buildingUnitName",      "name": "동 명칭 및 번호","type": "TEXT"},
+            {"key": "mainUse",               "name": "주용도",          "type": "TEXT"},
+            {"key": "unitCount",             "name": "호수",            "type": "NUMBER"},
+            {"key": "familyCount",           "name": "가구수",          "type": "NUMBER"},
+            {"key": "householdCount",        "name": "세대수",          "type": "NUMBER"},
+            {"key": "mainStructure",         "name": "주구조",          "type": "CHOICE", "options": ["철근콘크리트조","철골조","기타"]},
+            {"key": "detailStructure",       "name": "세부구조",        "type": "TEXT"},
+            {"key": "roof",                  "name": "지붕",            "type": "TEXT"},
+            {"key": "roofFinishMaterial",    "name": "지붕 마감재료",   "type": "TEXT"},
+            {"key": "basementFloors",        "name": "지하 층수",       "type": "NUMBER"},
+            {"key": "groundFloors",          "name": "지상 층수",       "type": "NUMBER"},
+            {"key": "height",                "name": "높이",            "type": "NUMBER", "unit": "m"},
+            {"key": "passengerElevatorCount","name": "승용승강기",      "type": "NUMBER"},
+            {"key": "emergencyElevatorCount","name": "비상용승강기",    "type": "NUMBER"},
+            {"key": "specialStructure",      "name": "특수구조 건축물", "type": "TEXT"}
+          ],
+          "layoutKey": "existingBuildingUnitSummary", "orderNo": 1, "metadata": {}},
+        {"questionType": "TABLE", "name": "허가신청 건축물의 동별 개요",
+          "displayType": "table",
+          "subFields": [
+            {"key": "mainOrAnnex",           "name": "주/부속구분",         "type": "CHOICE", "options": ["주 건축물","부속 건축물"]},
+            {"key": "buildingUnitName",      "name": "동 명칭 및 번호",     "type": "TEXT"},
+            {"key": "mainUse",               "name": "주용도",               "type": "TEXT"},
+            {"key": "unitCount",             "name": "호수",                 "type": "NUMBER"},
+            {"key": "familyCount",           "name": "가구수",               "type": "NUMBER"},
+            {"key": "householdCount",        "name": "세대수",               "type": "NUMBER"},
+            {"key": "mainStructure",         "name": "주구조",               "type": "CHOICE", "options": ["철근콘크리트조","철골조","기타"]},
+            {"key": "detailStructure",       "name": "세부구조",             "type": "TEXT"},
+            {"key": "roof",                  "name": "지붕",                 "type": "TEXT"},
+            {"key": "roofFinishMaterial",    "name": "지붕 마감재료",        "type": "TEXT"},
+            {"key": "buildingArea",          "name": "건축면적",             "type": "NUMBER", "unit": "㎡"},
+            {"key": "totalFloorArea",        "name": "연면적",               "type": "NUMBER", "unit": "㎡"},
+            {"key": "floorAreaForFar",       "name": "용적률 산정용 연면적", "type": "NUMBER", "unit": "㎡"},
+            {"key": "basementFloors",        "name": "지하 층수",            "type": "NUMBER"},
+            {"key": "groundFloors",          "name": "지상 층수",            "type": "NUMBER"},
+            {"key": "height",                "name": "높이",                 "type": "NUMBER", "unit": "m"},
+            {"key": "passengerElevatorCount","name": "승용승강기",           "type": "NUMBER"},
+            {"key": "emergencyElevatorCount","name": "비상용승강기",         "type": "NUMBER"},
+            {"key": "specialStructure",      "name": "특수구조 건축물",      "type": "TEXT"},
+            {"key": "specialStructureType",  "name": "특수구조 건축물 유형", "type": "TEXT"}
+          ],
+          "layoutKey": "permitBuildingUnitSummary", "orderNo": 2, "metadata": {}}
+      ]
+    },
+    {
+      "sectionCode": "floor_summary",
+      "name": "층별 개요",
+      "orderNo": 11,
+      "questions": [
+        {"questionType": "TEXT", "name": "동 명칭 및 번호",
+          "description": "동별 개요의 동 명칭 및 번호와 동일하게 작성",
+          "displayType": "text", "layoutKey": "buildingUnitNameForFloorSummary", "orderNo": 1, "metadata": {}},
+        {"questionType": "TABLE", "name": "층별 개요", "displayType": "table",
+          "subFields": [
+            {"key": "existingStructure","name": "기존 구조",       "type": "TEXT"},
+            {"key": "existingUse",      "name": "기존 용도",       "type": "TEXT"},
+            {"key": "existingArea",     "name": "기존 면적",       "type": "NUMBER", "unit": "㎡"},
+            {"key": "floorType",        "name": "층구분",          "type": "TEXT"},
+            {"key": "buildingCategory", "name": "건축구분",        "type": "TEXT"},
+            {"key": "permitStructure",  "name": "허가신청 구조",   "type": "TEXT"},
+            {"key": "permitUse",        "name": "허가신청 용도",   "type": "TEXT"},
+            {"key": "permitArea",       "name": "허가신청 면적",   "type": "NUMBER", "unit": "㎡"}
+          ],
+          "layoutKey": "floorSummary", "orderNo": 2, "metadata": {}}
+      ]
+    },
+    {
+      "sectionCode": "major_repair_summary",
+      "name": "대수선 개요",
+      "orderNo": 12,
+      "questions": [
+        {"questionType": "TABLE", "name": "대수선 내용",
+          "description": "대수선을 하려는 항목과 증설ㆍ해체ㆍ수선ㆍ변경 여부 작성",
+          "displayType": "table",
+          "subFields": [
+            {"key": "item",      "name": "항목",              "type": "TEXT"},
+            {"key": "selected",  "name": "선택",              "type": "BOOLEAN"},
+            {"key": "workType",  "name": "증설ㆍ해체ㆍ수선ㆍ변경", "type": "CHOICE", "options": ["증설","해체","수선","변경"]},
+            {"key": "quantity",  "name": "수량 또는 면적",    "type": "NUMBER"},
+            {"key": "unit",      "name": "단위",              "type": "TEXT"}
+          ],
+          "layoutKey": "majorRepairItems", "orderNo": 1,
+          "metadata": {"rows": ["내력벽","기둥","보","지붕틀","방화벽","방화구획","주계단","피난계단","특별피난계단","다가구주택의 가구 간 경계벽","다세대주택의 세대 간 경계벽","건축물의 외벽"]}}
+      ]
+    },
+    {
+      "sectionCode": "housing_type_summary",
+      "name": "준주택ㆍ도시형 생활주택 개요",
+      "orderNo": 13,
+      "questions": [
+        {"questionType": "TABLE", "name": "기존 건축물의 유형별 개요", "displayType": "table",
+          "subFields": [
+            {"key": "type",                    "name": "유형",            "type": "TEXT"},
+            {"key": "roomUnitHouseholdCount",  "name": "실/호/세대수",    "type": "NUMBER"},
+            {"key": "areaPerRoomUnitHousehold","name": "실/호/세대별 면적","type": "NUMBER", "unit": "㎡"}
+          ],
+          "layoutKey": "existingHousingTypeSummary", "orderNo": 1, "metadata": {}},
+        {"questionType": "TABLE", "name": "허가신청 건축물의 유형별 개요", "displayType": "table",
+          "subFields": [
+            {"key": "type",                    "name": "유형",            "type": "TEXT"},
+            {"key": "roomUnitHouseholdCount",  "name": "실/호/세대수",    "type": "NUMBER"},
+            {"key": "areaPerRoomUnitHousehold","name": "실/호/세대별 면적","type": "NUMBER", "unit": "㎡"}
+          ],
+          "layoutKey": "permitHousingTypeSummary", "orderNo": 2, "metadata": {}}
+      ]
+    },
+    {
+      "sectionCode": "multi_family_area",
+      "name": "다가구주택 호(가구)별 면적",
+      "orderNo": 14,
+      "questions": [
+        {"questionType": "TABLE", "name": "기존 건축물의 호(가구)별 면적", "displayType": "table",
+          "subFields": [
+            {"key": "unitFamilyType","name": "호(가구) 구분",        "type": "TEXT"},
+            {"key": "floorType",    "name": "층구분",                "type": "TEXT"},
+            {"key": "exclusiveArea","name": "호(가구)별 전용면적",   "type": "NUMBER", "unit": "㎡"}
+          ],
+          "layoutKey": "existingMultiFamilyArea", "orderNo": 1, "metadata": {}},
+        {"questionType": "TABLE", "name": "허가신청 건축물의 호(가구)별 면적", "displayType": "table",
+          "subFields": [
+            {"key": "unitFamilyType","name": "호(가구) 구분",        "type": "TEXT"},
+            {"key": "floorType",    "name": "층구분",                "type": "TEXT"},
+            {"key": "exclusiveArea","name": "호(가구)별 전용면적",   "type": "NUMBER", "unit": "㎡"}
+          ],
+          "layoutKey": "permitMultiFamilyArea", "orderNo": 2, "metadata": {}}
+      ]
+    },
+    {
+      "sectionCode": "rental_dormitory_area",
+      "name": "임대형기숙사 호(실)별 면적",
+      "orderNo": 15,
+      "questions": [
+        {"questionType": "NUMBER", "name": "기존 공유공간 전체 면적",    "displayType": "number", "validation": {"min": 0}, "layoutKey": "existingRentalDormSharedArea",  "orderNo": 1, "metadata": {"unit": "㎡", "formNumber": "㉗"}},
+        {"questionType": "NUMBER", "name": "허가신청 공유공간 전체 면적","displayType": "number", "validation": {"min": 0}, "layoutKey": "permitRentalDormSharedArea",    "orderNo": 2, "metadata": {"unit": "㎡", "formNumber": "㉘"}},
+        {"questionType": "NUMBER", "name": "기존 공용공간 전체 면적",    "displayType": "number", "validation": {"min": 0}, "layoutKey": "existingRentalDormCommonArea",  "orderNo": 3, "metadata": {"unit": "㎡", "formNumber": "㉙"}},
+        {"questionType": "NUMBER", "name": "허가신청 공용공간 전체 면적","displayType": "number", "validation": {"min": 0}, "layoutKey": "permitRentalDormCommonArea",    "orderNo": 4, "metadata": {"unit": "㎡", "formNumber": "㉚"}},
+        {"questionType": "TABLE", "name": "기존 임대형기숙사 호(실)별 면적", "displayType": "table",
+          "subFields": [
+            {"key": "roomType",     "name": "호(실) 구분",        "type": "TEXT"},
+            {"key": "floorType",    "name": "층구분",              "type": "TEXT"},
+            {"key": "exclusiveArea","name": "호(실)별 전용면적",   "type": "NUMBER", "unit": "㎡"}
+          ],
+          "layoutKey": "existingRentalDormRoomArea", "orderNo": 5, "metadata": {"formNumber": "㉛"}},
+        {"questionType": "TABLE", "name": "허가신청 임대형기숙사 호(실)별 면적", "displayType": "table",
+          "subFields": [
+            {"key": "roomType",     "name": "호(실) 구분",        "type": "TEXT"},
+            {"key": "floorType",    "name": "층구분",              "type": "TEXT"},
+            {"key": "exclusiveArea","name": "호(실)별 전용면적",   "type": "NUMBER", "unit": "㎡"}
+          ],
+          "layoutKey": "permitRentalDormRoomArea", "orderNo": 6, "metadata": {"formNumber": "㉜"}}
+      ]
+    }
+  ]
+}
