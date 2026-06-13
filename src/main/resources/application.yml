@@ -39,6 +39,8 @@ logging:
 app:
   upload:
     dir: ${UPLOAD_DIR:./uploads}
+  ai:
+    base-url: ${AI_BASE_URL:http://localhost:8000}
 
 external:
   kakao:
