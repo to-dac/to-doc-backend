@@ -3,7 +3,7 @@
 build/
 out/
 gradle.properties
-
+docs/
 # IntelliJ IDEA
 .idea/
 *.iml
