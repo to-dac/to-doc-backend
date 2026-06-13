@@ -12,10 +12,6 @@ spring:
       minimum-idle: 2
       connection-timeout: 30000
 
-  h2:
-    console:
-      enabled: false
-
   jpa:
     hibernate:
       ddl-auto: ${JPA_DDL_AUTO:validate}
@@ -39,3 +35,7 @@ springdoc:
 logging:
   level:
     com.todoc: INFO
+
+app:
+  upload:
+    dir: ${UPLOAD_DIR:./uploads}
