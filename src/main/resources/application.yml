@@ -39,3 +39,16 @@ logging:
 app:
   upload:
     dir: ${UPLOAD_DIR:./uploads}
+
+external:
+  kakao:
+    api-key: ${KAKAO_API_KEY}
+    address-search-url: https://dapi.kakao.com/v2/local/search/address.json
+  vworld:
+    api-key: ${VWORLD_API_KEY}
+    land-url: https://api.vworld.kr/ned/data/getLandCharacteristics
+    land-use-url: https://api.vworld.kr/ned/data/getLandUseAttr
+    wfs-url: https://api.vworld.kr/req/wfs
+  data-go-kr:
+    api-key: ${DATA_GO_KR_API_KEY}
+    building-url: http://apis.data.go.kr/1613000/BldRgstHubService/getBrTitleInfo
