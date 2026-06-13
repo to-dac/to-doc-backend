@@ -8,6 +8,7 @@ public record ChatSessionResponse(
         Long userId,
         String title,
         String address,
+        Long templateId,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
@@ -17,6 +18,7 @@ public record ChatSessionResponse(
                 session.getUser().getId(),
                 session.getTitle(),
                 session.getAddress(),
+                session.getTemplateId(),
                 session.getCreatedAt(),
                 session.getUpdatedAt()
         );
