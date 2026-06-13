@@ -12,6 +12,7 @@ import com.todoc.dto.request.SendChatMessageRequest;
 import com.todoc.dto.response.ChatMessageResponse;
 import com.todoc.dto.response.ChatSessionResponse;
 import com.todoc.domain.FormSubmission;
+import com.todoc.dto.response.FormSubmissionResponse;
 import com.todoc.dto.response.FormTemplateDetailResponse;
 import com.todoc.dto.response.LandInfoResponse;
 import com.todoc.exception.NotFoundException;
@@ -76,35 +77,59 @@ public class ChatService {
                 .templateId(request.templateId())
                 .build();
 
-        chatSessionRepository.save(session);
-
         if (landInfo != null) {
             try {
                 session.updateLandInfo(objectMapper.writeValueAsString(landInfo));
-
-                FormTemplateDetailResponse templateDetail = null;
-                if (request.templateId() != null) {
-                    templateDetail = formTemplateService.getDetailById(request.templateId());
-                }
-
-                AiPermitClient.CreateDocumentResponse docResponse =
-                        aiPermitClient.createDocument(session.getId(), landInfo, templateDetail);
-                if (docResponse != null && request.templateId() != null) {
-                    List<AiPermitClient.AnswerItem> answers = docResponse.toAnswerItems();
-                    if (!answers.isEmpty()) {
-                        FormSubmission sub = formSubmissionService.submitAiGenerated(
-                                request.templateId(), request.userId(), session, answers);
-                        session.updateSubmissionId(sub.getId());
-                    }
-                }
             } catch (JsonProcessingException e) {
                 log.error("토지 정보 직렬화 실패: sessionId={}", session.getId(), e);
-            } catch (Exception e) {
-                log.error("세션 초기화 중 오류: sessionId={}", session.getId(), e);
             }
         }
 
+        chatSessionRepository.save(session);
         return ChatSessionResponse.from(session);
+    }
+
+    @Transactional
+    public FormSubmissionResponse generateDocument(Long sessionId) {
+        ChatSession session = chatSessionRepository.findById(sessionId)
+                .orElseThrow(() -> new NotFoundException("세션을 찾을 수 없습니다: id=" + sessionId));
+
+        if (session.getTemplateId() == null) {
+            throw new IllegalStateException("세션에 템플릿이 설정되지 않았습니다.");
+        }
+        if (session.getLandInfo() == null) {
+            throw new IllegalStateException("세션에 토지 정보가 없습니다.");
+        }
+
+        try {
+            LandInfoResponse landInfo = objectMapper.readValue(session.getLandInfo(), LandInfoResponse.class);
+            FormTemplateDetailResponse templateDetail = formTemplateService.getDetailById(session.getTemplateId());
+
+            AiPermitClient.CreateDocumentResponse docResponse =
+                    aiPermitClient.createDocument(sessionId, landInfo, templateDetail);
+            if (docResponse == null) {
+                throw new IllegalStateException("AI 서버 응답이 없습니다.");
+            }
+
+            List<AiPermitClient.AnswerItem> answers = docResponse.toAnswerItems();
+            FormSubmission sub = formSubmissionService.submitAiGenerated(
+                    session.getTemplateId(), session.getUser().getId(), session, answers);
+            session.updateSubmissionId(sub.getId());
+
+            return formSubmissionService.getById(sub.getId());
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("토지 정보 파싱 실패", e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public FormSubmissionResponse getDocument(Long sessionId) {
+        ChatSession session = chatSessionRepository.findById(sessionId)
+                .orElseThrow(() -> new NotFoundException("세션을 찾을 수 없습니다: id=" + sessionId));
+        if (session.getSubmissionId() == null) {
+            throw new NotFoundException("생성된 문서가 없습니다. POST /sessions/" + sessionId + "/document 를 먼저 호출하세요.");
+        }
+        return formSubmissionService.getById(session.getSubmissionId());
     }
 
     @Transactional(readOnly = true)

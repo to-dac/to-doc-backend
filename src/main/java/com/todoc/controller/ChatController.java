@@ -4,6 +4,7 @@ import com.todoc.dto.request.CreateChatSessionRequest;
 import com.todoc.dto.request.SendChatMessageRequest;
 import com.todoc.dto.response.ChatMessageResponse;
 import com.todoc.dto.response.ChatSessionResponse;
+import com.todoc.dto.response.FormSubmissionResponse;
 import com.todoc.service.ChatService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,17 @@ public class ChatController {
             @PathVariable Long sessionId,
             @RequestBody @Valid SendChatMessageRequest request) {
         return chatService.sendStreamingMessage(sessionId, request);
+    }
+
+    @PostMapping("/sessions/{sessionId}/document")
+    @ResponseStatus(HttpStatus.CREATED)
+    public FormSubmissionResponse generateDocument(@PathVariable Long sessionId) {
+        return chatService.generateDocument(sessionId);
+    }
+
+    @GetMapping("/sessions/{sessionId}/document")
+    public FormSubmissionResponse getDocument(@PathVariable Long sessionId) {
+        return chatService.getDocument(sessionId);
     }
 
     @DeleteMapping("/sessions/{sessionId}")
