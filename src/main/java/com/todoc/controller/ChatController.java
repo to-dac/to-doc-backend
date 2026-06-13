@@ -38,6 +38,14 @@ public class ChatController {
         return chatService.getMessagesBySessionId(sessionId);
     }
 
+    @PostMapping("/sessions/{sessionId}/messages")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ChatMessageResponse sendMessage(
+            @PathVariable Long sessionId,
+            @RequestBody @Valid SendChatMessageRequest request) {
+        return chatService.sendMessage(sessionId, request);
+    }
+
     @PostMapping(value = "/sessions/{sessionId}/messages/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter sendStreamingMessage(
             @PathVariable Long sessionId,
