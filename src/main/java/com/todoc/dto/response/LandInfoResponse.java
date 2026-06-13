@@ -23,7 +23,8 @@ public record LandInfoResponse(
         String pblntfPclnd,
         String lastUpdtDt,
         Building building,
-        List<LandUse> landUses
+        List<LandUse> landUses,
+        List<String> applicablePermitCodes
 ) {
 
     public record LandUse(
@@ -55,7 +56,7 @@ public record LandInfoResponse(
 
     public static LandInfoResponse of(String pnu, String address,
             VWorldLandResponse.Field field, BuildingInfoResponse bldg,
-            List<VWorldLandUseResponse.Field> uses) {
+            List<VWorldLandUseResponse.Field> uses, List<String> applicablePermitCodes) {
         Building building = bldg == null
                 ? new Building(false, null, null, null, null, null, null, null, null, null, null, null, null, null)
                 : new Building(true,
@@ -73,6 +74,6 @@ public record LandInfoResponse(
                 field.prposArea1Nm(), field.prposArea2Nm(), field.ladUseSittnNm(),
                 field.tpgrphHgCodeNm(), field.tpgrphFrmCodeNm(), field.roadSideCodeNm(),
                 field.pblntfPclnd(), field.lastUpdtDt(),
-                building, landUses);
+                building, landUses, applicablePermitCodes);
     }
 }
