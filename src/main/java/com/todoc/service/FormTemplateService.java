@@ -4,10 +4,13 @@ import com.todoc.dto.response.FormTemplateDetailResponse;
 import com.todoc.dto.response.FormTemplateDetailResponse.QuestionResponse;
 import com.todoc.dto.response.FormTemplateDetailResponse.SectionResponse;
 import com.todoc.dto.response.FormTemplateResponse;
+import com.todoc.dto.response.PermitDashboardResponse;
 import com.todoc.exception.NotFoundException;
+import com.todoc.repository.ChecklistItemTemplateRepository;
 import com.todoc.repository.FormQuestionRepository;
 import com.todoc.repository.FormSectionRepository;
 import com.todoc.repository.FormTemplateRepository;
+import com.todoc.repository.TimelineTemplateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +25,8 @@ public class FormTemplateService {
     private final FormTemplateRepository templateRepository;
     private final FormSectionRepository sectionRepository;
     private final FormQuestionRepository questionRepository;
+    private final TimelineTemplateRepository timelineTemplateRepository;
+    private final ChecklistItemTemplateRepository checklistItemTemplateRepository;
 
     public List<FormTemplateResponse> listActive() {
         return templateRepository.findAllByActiveTrue().stream()
@@ -45,5 +50,15 @@ public class FormTemplateService {
                 .toList();
 
         return FormTemplateDetailResponse.from(template, sections);
+    }
+
+    public PermitDashboardResponse getDashboard(String templateCode) {
+        var template = templateRepository.findByTemplateCode(templateCode)
+                .orElseThrow(() -> new NotFoundException("템플릿을 찾을 수 없습니다: " + templateCode));
+
+        var timeline = timelineTemplateRepository.findByTemplate_TemplateCodeOrderByOrderNoAsc(templateCode);
+        var checklist = checklistItemTemplateRepository.findByTemplate_TemplateCodeOrderByOrderNoAsc(templateCode);
+
+        return PermitDashboardResponse.of(template, timeline, checklist);
     }
 }
