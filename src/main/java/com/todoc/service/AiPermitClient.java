@@ -2,7 +2,7 @@ package com.todoc.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -21,11 +21,13 @@ public class AiPermitClient {
         try {
             return aiRestClient.post()
                     .uri("/api/v1/permit/chat")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
                     .body(new PermitChatRequest(message, sessionId.toString()))
                     .retrieve()
                     .body(PermitChatResponse.class);
         } catch (Exception e) {
-            log.error("AI 백엔드 호출 실패: {}", e.getMessage());
+            log.error("AI 백엔드 호출 실패: sessionId={}, error={}", sessionId, e.getMessage(), e);
             return new PermitChatResponse(sessionId.toString(), "AI 응답을 받지 못했습니다. 잠시 후 다시 시도해주세요.", null);
         }
     }
