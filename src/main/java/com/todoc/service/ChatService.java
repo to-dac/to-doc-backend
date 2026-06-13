@@ -12,6 +12,7 @@ import com.todoc.dto.response.ChatSessionResponse;
 import com.todoc.exception.NotFoundException;
 import com.todoc.repository.ChatMessageRepository;
 import com.todoc.repository.ChatSessionRepository;
+import com.todoc.repository.FormTemplateRepository;
 import com.todoc.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -30,9 +32,20 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class ChatService {
 
+    private static final Map<String, String> PERMIT_TYPE_TO_TEMPLATE_CODE = Map.of(
+            "building", "building_major_repair_use_change_permit",
+            "dev_act",  "development_activity_permit",
+            "farmland", "farmland_conversion_permit",
+            "road",     "road_permit",
+            "river",    "river_permit",
+            "mountain", "mountain_permit"
+    );
+
     private final ChatSessionRepository chatSessionRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final UserRepository userRepository;
+    private final FormTemplateRepository formTemplateRepository;
+    private final AiPermitClient aiPermitClient;
 
     @Transactional
     public ChatSessionResponse createSession(CreateChatSessionRequest request) {
@@ -65,6 +78,33 @@ public class ChatService {
         return chatMessageRepository.findBySessionIdOrderByCreatedAtAsc(sessionId).stream()
                 .map(ChatMessageResponse::from)
                 .toList();
+    }
+
+    @Transactional
+    public ChatMessageResponse sendMessage(Long sessionId, SendChatMessageRequest request) {
+        ChatSession session = chatSessionRepository.findById(sessionId)
+                .orElseThrow(() -> new NotFoundException("세션을 찾을 수 없습니다: id=" + sessionId));
+
+        saveMessage(session, MessageRole.USER, request.content());
+
+        AiPermitClient.PermitChatResponse aiResponse = aiPermitClient.chat(request.content(), sessionId);
+
+        if (aiResponse.permit_type() != null) {
+            String templateCode = PERMIT_TYPE_TO_TEMPLATE_CODE.get(aiResponse.permit_type());
+            if (templateCode != null) {
+                formTemplateRepository.findByTemplateCode(templateCode)
+                        .ifPresent(t -> session.updateTemplateId(t.getId()));
+            }
+        }
+
+        ChatMessage assistantMessage = ChatMessage.builder()
+                .session(session)
+                .role(MessageRole.ASSISTANT)
+                .content(aiResponse.reply())
+                .status(MessageStatus.COMPLETED)
+                .build();
+
+        return ChatMessageResponse.from(chatMessageRepository.save(assistantMessage));
     }
 
     @Transactional
